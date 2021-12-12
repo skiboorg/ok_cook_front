@@ -1,21 +1,22 @@
 <template>
   <div class="fullscreen bg-blue text-white text-center q-pa-md flex flex-center">
     <div>
-      <div style="font-size: 30vh">
+      <div style="font-size: 20vh">
         404
       </div>
 
       <div class="text-h2" style="opacity:.4">
-        Oops. Nothing here...
+        Тут нет еды
       </div>
 
       <q-btn
         class="q-mt-xl"
-        color="white"
-        text-color="blue"
-        unelevated
+        color="secondary"
+        text-color="white"
+        push
+        rounded
         to="/"
-        label="Go Home"
+        label="На главную"
         no-caps
       />
     </div>
