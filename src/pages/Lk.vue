@@ -24,8 +24,8 @@
 
     <q-tab-panels swipeable v-model="tab" animated class="bg-grey-2">
       <q-tab-panel name="personal">
-        <p class="q-md-lg">Рефферальная сссылка:<br> http://localhost/?ref={{$auth.user.own_ref_code}}
-          <span @click="copyCB(`https://ok-cook.ru?ref=${$auth.user.own_ref_code}`)" class="link text-caption text-primary cursor-pointer">скопировать</span></p>
+        <p class="q-md-lg">Рефферальная сссылка:<br> https://ok-cook.ru/?ref={{$auth.user.own_ref_code}}
+          <span @click="copyCB(`https://ok-cook.ru/?ref=${$auth.user.own_ref_code}`)" class="link text-caption text-primary cursor-pointer">скопировать</span></p>
         <q-form >
           <p>Тип плательщика</p>
           <q-option-group
