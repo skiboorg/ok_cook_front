@@ -7,7 +7,7 @@
       <router-view />
     </q-page-container>
     </div>
-    <footer class="footer q-pb-lg">
+    <footer class="footer q-pb-lg gt-sm">
       <div class="container">
        <nav class="nav">
              <ul class="nav-wrapper">
@@ -25,7 +25,7 @@
       </div>
 
     </footer>
-    <q-page-scroller position="bottom-right" :scroll-offset="250" :offset="[20, 20]">
+    <q-page-scroller position="bottom-right" class="z-top" :scroll-offset="250" :offset="[20, 20]">
         <q-btn fab  icon="keyboard_arrow_up" color="secondary" />
       </q-page-scroller>
   </q-layout>

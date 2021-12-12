@@ -8,16 +8,19 @@
     <div v-if="!is_password_recover" class="">
       <q-form @submit="userLoginAction" class="full-width q-gutter-sd q-mb-lg">
         <q-input
-          filled
+
           :dense="!$q.screen.gt.sm"
           v-model="userLogin.email"
+          rounded
+          outlined
           label="Ваш E-mail*"
           lazy-rules
           :rules="[ val => val && val.length > 0 || 'Это обязательное поле',
             val => email_re.test(String(val)) || 'Введен не корректный адрес e-mail']"/>
         <q-input
           :dense="!$q.screen.gt.sm"
-          filled
+          rounded
+          outlined
           :type="isPwd ? 'password' : 'text'"
           v-model="userLogin.password"
           label="Пароль"
@@ -42,14 +45,20 @@
       <q-form @submit="userRestorePassword" class="full-width q-gutter-sd q-mb-lg">
         <p class="text-caption">На указанный E-mail будет выслан новый пароль</p>
         <q-input
-          filled
+          rounded
+          outlined
           :dense="!$q.screen.gt.sm"
-          v-model="userInput.email"
+          v-model="userData.email"
           label="Ваш E-mail*"
           lazy-rules
           :rules="[ val => val && val.length > 0 || 'Это обязательное поле',
             val => email_re.test(String(val)) || 'Введен не корректный адрес e-mail']"/>
-        <q-btn rounded push :loading="is_loading" label="Сбросить пароль"  no-caps type="submit"  color="primary" class="q-mt-md full-width q-py-md text-bold"/>
+        <q-btn rounded push :loading="is_loading" label="Сбросить пароль"  no-caps type="submit"  color="primary"
+               class="q-mt-md full-width q-py-md text-bold q-mb-lg"
+
+        />
+        <p @click="is_password_recover=false" class="text-right q-mb-md cursor-pointer text-primary text-caption link">Вход</p>
+      <p @click="is_register_mode=true" class="text-right q-mb-none cursor-pointer text-primary text-caption link">Зарегистрироваться</p>
       </q-form>
     </div>
 
@@ -60,7 +69,8 @@
      </div>
       <q-form @submit="completeRegistration" class="full-width q-gutter-sd q-mb-lg">
         <q-input
-          filled
+          rounded
+          outlined
           :dense="!$q.screen.gt.sm"
           v-model="userData.email"
           label="Ваш E-mail*"
@@ -69,7 +79,8 @@
             val => email_re.test(String(val)) || 'Введен не корректный адрес e-mail']"/>
         <q-input
           :dense="!$q.screen.gt.sm"
-          filled
+          rounded
+          outlined
           :type="isPwd ? 'password' : 'text'"
 
 
@@ -86,7 +97,8 @@
         </q-input>
         <q-input
           :dense="!$q.screen.gt.sm"
-          filled
+          rounded
+          outlined
           :type="isPwd ? 'password' : 'text'"
           v-model="userData.password"
           label="Повторите пароль*"
@@ -101,18 +113,30 @@
               @click="isPwd = !isPwd"/>
           </template>
         </q-input>
+        <q-input
+          :dense="!$q.screen.gt.sm"
+          rounded
+          outlined
+          class="q-mb-md"
+          v-model="userData.ref_code"
+          :readonly="is_have_ref_code"
+          label="Реферальный код"/>
 
         <q-checkbox class="q-mb-md text-caption text-weight-thin" v-model="agree" label="Я согласен с условиями обработки персональных данных" />
 
-        <q-btn rounded push :disable="!agree" :loading="is_loading" label="Регистрация"  no-caps type="submit"  color="primary" class="full-width  q-py-md text-bold"/>
+        <q-btn dense rounded push :disable="!agree" :loading="is_loading" label="Регистрация"  no-caps type="submit"  color="primary"
+               class="full-width  q-py-md text-bold q-mb-lg"/>
+         <p @click="is_register_mode=false" class="text-right q-mb-md cursor-pointer text-primary text-caption link">Вход</p>
 
       </q-form>
 
     </div>
 </template>
 <script>
-
+import { Cookies } from 'quasar'
 import { mapActions } from 'vuex'
+
+
 export default {
   props:['redirect'],
 
@@ -123,6 +147,7 @@ export default {
       is_loading:false,
       isPwd:true,
       agree:false,
+      is_have_ref_code:false,
 
       userLogin:{
         email:null,
@@ -132,9 +157,21 @@ export default {
         email:null,
         password1:null,
         password:null,
+        ref_code:null
       },
       email_re:/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 
+    }
+  },
+  beforeMount() {
+    const ref_code = Cookies.get('ref_code')
+    console.log(ref_code)
+    if (ref_code){
+      this.userData.ref_code = ref_code
+      this.is_have_ref_code = true
+    }
+    else {
+      this.is_have_ref_code = false
     }
   },
   methods:{
@@ -159,6 +196,7 @@ export default {
         await this.$api.post('/auth/users/', {
           email:this.userData.email,
           password:this.userData.password,
+          used_ref_code:this.userData.ref_code,
         })
         this.$q.notify({
           message: 'Аккаунт создан',
@@ -166,6 +204,8 @@ export default {
           color:'positive',
           icon: 'announcement'
         })
+
+        Cookies.remove('ref_code')
         this.is_loading=false
         await this.loginUser({payload:this.userData,redirect:this.redirect})
       }catch (e) {
@@ -188,4 +228,7 @@ export default {
 .sign-form
   width: 370px
   max-width: 90vw
+@media (max-width: 768px)
+  .sign-form
+    width: 100%
 </style>

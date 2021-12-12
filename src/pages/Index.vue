@@ -1,10 +1,10 @@
 <template>
   <q-page>
     <section class="offer">
-      <div class="row q-col-gutter-lg items-center">
-        <div class="col-12 col-md-6">
+      <div class="row q-col-gutter-none q-col-gutter-md-lg items-center">
+        <div class="col-12 col-md-6 offer-text">
           <h1 class="text-primary text-42 text-center text-lh-110">Вкусная еда на любой вкус</h1>
-          <div class="flex items-center justify-between no-wrap q-mb-xl">
+          <div class="flex items-center justify-between no-wrap q-mb-lg q-mb-md-xl">
             <p class="text-center text-bond text-bold text-h4 col-grow no-margin">Smart Frost Technology</p>
             <q-img  src="~assets/frost.png"/>
           </div>
@@ -76,44 +76,45 @@
 
       class="bg-primary fit-content"
     >
-      <q-carousel-slide :name="1" class="column no-wrap">
+      <q-carousel-slide :name="1" class="column no-wrap ">
         <div class="row q-col-gutter-lg ">
-          <div class="col-4 feedback-item">
+          <div class="col-12 col-md-4 feedback-item">
             <q-icon class="q-mb-lg" color="white" size="50px" name="format_quote"/>
             <p class="text-bond text-h5">Продовольственный онлайн-центр</p>
             <p class="text-bond text-body1">Рекомендации — это короткие цитаты от людей,которые любят ваш бренд. Это отличный способубедить клиентов попробовать ваши услуги.</p>
           </div>
-            <div class="col-4 feedback-item">
+            <div class="col-12 col-md-4 feedback-item">
             <q-icon class="q-mb-lg" color="white" size="50px" name="format_quote"/>
             <p class="text-bond text-h5">Продовольственный онлайн-центр</p>
             <p class="text-bond text-body1">Рекомендации — это короткие цитаты от людей,которые любят ваш бренд. Это отличный способубедить клиентов попробовать ваши услуги.</p>
           </div>
-             <div class="col-4 feedback-item">
+             <div class="col-12 col-md-4 feedback-item">
             <q-icon class="q-mb-lg" color="white" size="50px" name="format_quote"/>
             <p class="text-bond text-h5">Продовольственный онлайн-центр</p>
             <p class="text-bond text-body1">Рекомендации — это короткие цитаты от людей,которые любят ваш бренд. Это отличный способубедить клиентов попробовать ваши услуги.</p>
           </div>
         </div>
       </q-carousel-slide>
-         <q-carousel-slide :name="2" class="column no-wrap">
+           <q-carousel-slide :name="2" class="column no-wrap ">
         <div class="row q-col-gutter-lg ">
-          <div class="col-4 feedback-item">
+          <div class="col-12 col-md-4 feedback-item">
             <q-icon class="q-mb-lg" color="white" size="50px" name="format_quote"/>
             <p class="text-bond text-h5">Продовольственный онлайн-центр</p>
             <p class="text-bond text-body1">Рекомендации — это короткие цитаты от людей,которые любят ваш бренд. Это отличный способубедить клиентов попробовать ваши услуги.</p>
           </div>
-            <div class="col-4 feedback-item">
+            <div class="col-12 col-md-4 feedback-item">
             <q-icon class="q-mb-lg" color="white" size="50px" name="format_quote"/>
             <p class="text-bond text-h5">Продовольственный онлайн-центр</p>
-            <p class="text-bond text-body1">Рекомендации — это короткие цитаты от людей,которые любят ваш бренд. Это отлРекомендации — это короткие цитаты от людей,которые любят ваш бренд. Это отлРекомендации — это короткие цитаты от людей,которые любят ваш бренд. Это отлРекомендации — это короткие цитаты от людей,которые любят ваш бренд. Это отличный способубедить клиентов попробовать ваши услуги.</p>
+            <p class="text-bond text-body1">Рекомендации — это короткие цитаты от людей,которые любят ваш бренд. Это отличный способубедить клиентов попробовать ваши услуги.</p>
           </div>
-             <div class="col-4 feedback-item">
+             <div class="col-12 col-md-4 feedback-item">
             <q-icon class="q-mb-lg" color="white" size="50px" name="format_quote"/>
             <p class="text-bond text-h5">Продовольственный онлайн-центр</p>
             <p class="text-bond text-body1">Рекомендации — это короткие цитаты от людей,которые любят ваш бренд. Это отличный способубедить клиентов попробовать ваши услуги.</p>
           </div>
         </div>
       </q-carousel-slide>
+
 
     </q-carousel>
     </section>
@@ -122,7 +123,7 @@
         <div class="col-12 col-md-6">
           <q-img  src="~assets/contacts-img.png"/>
         </div>
-        <div class="col-12 col-md-6 contacts-bg q-pl-xl q-py-lg">
+        <div class="col-12 col-md-6 contacts-bg q-pl-md q-pl-md-xl q-py-lg">
            <p class=" text-h3 text-primary  text-lh-100">Свяжитесь с нами</p>
           <p class="text-bond text-h6 q-mb-none">ЭЛЕКТРОННЫЙ АДРЕС</p>
           <p> <a class="text-bond text-h6" href="mailto:privyet@website.ru">privyet@website.ru</a></p>
@@ -175,7 +176,7 @@
 </template>
 
 <script>
-
+import { useQuasar } from 'quasar'
 export default {
   data(){
     return{
@@ -197,10 +198,17 @@ export default {
         const myEl = this.$refs[ref]
     console.log(myEl)
       this.$smoothScroll({
+        updateHistory:false,
         scrollTo: myEl, // scrollTo is also allowed to be number
-        hash: this.$route.hash // required if updateHistory is true
+        //hash: this.$route.hash // required if updateHistory is true
       })
      }
+
+    if(this.$route.query.ref){
+      console.log(this.$route.query.ref)
+      const $q = useQuasar()
+      const value = $q.cookies.set('ref_code',this.$route.query.ref)
+    }
 
 
     }
@@ -214,10 +222,21 @@ export default {
   &--img
     position: relative
     left: -20px
+@media (max-width: 768px)
+  .gradient-box
+    height: unset !important
+    order: 1
+    &--img
+      left: -10px
+  .offer-text
+    order: 2
 .frost-bg
   background: url(~assets/frost.png) no-repeat center
   z-index: -1
   opacity: .5
+@media (max-width: 768px)
+  .frost-bg
+    background-position: bottom
 .we-offer
   &--wrapper
     background: linear-gradient(180deg, $grey-2 50%, $primary 50%)
@@ -227,6 +246,13 @@ export default {
     display: grid
     grid-template-columns: repeat(3,1fr)
     grid-gap: 70px
+@media (max-width: 768px)
+  .we-offer
+    &--wrapper
+      background: $primary
+    &--items
+      grid-template-columns: 1fr
+      grid-gap: 0px
 .feedback
   position: relative
   & .section-title
@@ -235,7 +261,7 @@ export default {
   &::before
     position: absolute
     content: url(~assets/feedback-img.png)
-    top: 55px
+    top: 65px
     left: 50%
     transform: translateX(-50%)
     z-index: 2
@@ -267,4 +293,10 @@ export default {
   &-wrapper
     max-width: 800px
     margin: 0 auto
+@media (max-width: 768px)
+  .faq
+    &::before
+      content: none
+    &::after
+      content: none
 </style>

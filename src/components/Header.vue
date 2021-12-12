@@ -2,19 +2,11 @@
    <q-header reveal  :reveal-offset="50" height-hint="150" class="bg-grey-2 q-py-md">
      <div class="container">
          <q-toolbar class="flex items-center justify-between">
-        <q-btn
-          flat
-          dense
-          round
-          class="lt-md"
-          icon="menu"
-          aria-label="Menu"
-          @click="menuOpen=true"
-        />
+
         <router-link to="/">
           <img class="logo" src="~assets/logo.png" alt="">
         </router-link>
-           <nav class="nav">
+           <nav class="nav gt-sm">
              <ul class="nav-wrapper">
                <li class="nav-item"><a class="nav-link" href="#feedback"  >О нас </a></li>
                <li class="nav-item"><a class="nav-link" href="#our_products"  >Продукция </a></li>
@@ -30,6 +22,16 @@
 
              </ul>
            </nav>
+            <q-btn
+          flat
+          dense
+          round
+          text-color="dark"
+          class="lt-md"
+          icon="menu"
+          aria-label="Menu"
+          @click="menuOpen=true"
+        />
 
 
       </q-toolbar>
@@ -40,16 +42,20 @@
     <q-drawer
       v-model="menuOpen"
       bordered
+      side="right"
     >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
+      <ul class="mobile-nav-wrapper">
+               <li class="nav-item q-mb-md"><a class="nav-link block" href="#feedback"  >О нас </a></li>
+               <li class="nav-item q-mb-md"><a class="nav-link block" href="#our_products"  >Продукция </a></li>
+               <li class="nav-item q-mb-lg"><a class="nav-link block" href="#faq"  >Помощь </a></li>
 
+               <li class="nav-item q-mb-md"><router-link class="nav-link" to="/menu">Оформить заказ</router-link></li>
+               <li v-if="$auth.loggedIn" class="nav-item q-mb-md"><router-link class="nav-link" to="/lk">ЛК</router-link></li>
+               <li v-if="$auth.loggedIn" class="nav-item q-mb-md"><a class="nav-link " href="#" @click.prevent="logoutUserAction">Выйти</a></li>
 
-      </q-list>
+               <li v-else class="nav-item q-mb-md"><router-link class="nav-link" to="/auth">Войти</router-link></li>
+
+             </ul>
     </q-drawer>
 </template>
 <script>
@@ -80,6 +86,8 @@ export default {
 }
 </script>
 <style lang="sass">
+.mobile-nav-wrapper
+  list-style: none
 .nav
   flex-grow: 1
   &-wrapper

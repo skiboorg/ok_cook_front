@@ -62,9 +62,10 @@
             align="justify"
             swipeable
             mobile-arrows
+            outside-arrows
             narrow-indicator
           >
-            <q-tab :name="index" :label="category.name" v-for="(category,index) in categories" :key="index" />
+            <q-tab  :name="index" :label="category.name" v-for="(category,index) in categories" :key="index" />
           </q-tabs>
 
           <q-separator />
@@ -173,7 +174,7 @@
                 </q-form>
 
                 <q-stepper-navigation>
-                  <q-btn no-caps rounded push :loading="is_loading" color="primary" @click="createOrder" label="Оплата заказа" />
+                  <q-btn no-caps :class="{'full-width':$q.screen.lt.sm}"  rounded push :loading="is_loading" color="primary" @click="createOrder" label="Оплата заказа" />
 
                 </q-stepper-navigation>
               </q-step>
@@ -196,7 +197,7 @@
             <q-separator class="q-mb-md"/>
             <p class="q-mb-lg text-h5">Сумма заказа {{menu_type[current_menu_type_index].price}} ₽</p>
 
-             <q-btn :loading="is_loading" color="secondary" push rounded @click="resetCart" label="Изменить заказ" class="q-ml-sm" />
+             <q-btn :loading="is_loading" :class="{'full-width':$q.screen.lt.sm}" color="secondary" push rounded @click="resetCart" label="Изменить заказ" class="q-ml-sm" />
           </div>
         </div>
 
@@ -207,8 +208,8 @@
 
       <template v-slot:navigation>
         <q-stepper-navigation>
-          <q-btn v-if="step === 2"  color="secondary" push rounded @click="$refs.stepper.previous()" label="Изменить тип меню" class="q-ml-sm" />
-          <q-btn v-if="step === 2" :disable="!can_add_more" :loading="is_loading" color="primary" push rounded @click="addToCart" label="Оформить" class="q-ml-sm" />
+          <q-btn v-if="step === 2" :class="{'full-width  q-mb-md':$q.screen.lt.sm}" color="secondary" push rounded @click="$refs.stepper.previous()" label="Изменить тип меню" class=" q-py-sm text-bold " />
+          <q-btn v-if="step === 2" :class="{'full-width ':$q.screen.lt.sm}" :disable="!can_add_more" :loading="is_loading" color="primary" push rounded @click="addToCart" label="Оформить" class="q-ml-sm q-py-sm text-bold" />
 
         </q-stepper-navigation>
       </template>
@@ -285,8 +286,9 @@ export default {
       this.is_loading = !this.is_loading
       const response = await this.$api.post('/api/order/create',{menu_type_id:this.current_menu_type_id,order_data:this.orderData})
       console.log(response.data)
-      this.order_code = response.data.code
-      this.is_order_done = true
+      window.location.href = response.data.url
+      // this.order_code = response.data.code
+      // this.is_order_done = true
       this.is_loading = !this.is_loading
     },
     async addToCart(){
@@ -368,4 +370,11 @@ export default {
   display: grid
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr))
   grid-gap: 20px
+
+@media (max-width: 768px)
+  .item
+    height: 350px
+  .items-grid
+    grid-template-columns: 48% 48%
+    grid-gap: 10px
 </style>
