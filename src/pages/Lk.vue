@@ -35,9 +35,12 @@
             dense
             v-model="userData.user_type"
           />
+          <p class="q-mb-sm">ФИО</p>
+          <q-input class="q-mb-sm" dense outlined v-model="userData.fio"/>
           <p>Адрес доставки</p>
           <q-input dense outlined v-model="userData.address"/>
           <div v-if="userData.user_type==='ur'">
+
             <p class="q-mb-sm">Название компании</p>
             <q-input class="q-mb-sm" dense outlined v-model="userData.company_name"/>
             <p class="q-mb-sm">Юридический адрес</p>
@@ -62,15 +65,19 @@
 
         <q-list separator>
           <q-item class="q-py-md">
-            <q-item-section  class="q-mr-lg text-bold text-dark">ID заказа</q-item-section>
+            <q-item-section   class="q-mr-lg text-bold text-dark">ID заказа</q-item-section>
             <q-item-section class="text-bold text-dark">Код заказа</q-item-section>
+            <q-item-section class="text-bold text-dark">Сумма заказа</q-item-section>
+            <q-item-section class="text-bold text-dark">Доставка</q-item-section>
             <q-item-section class="text-bold text-dark">Дата заказа</q-item-section>
+            <q-item-section class="text-bold text-dark">Оплата</q-item-section>
 
 
           </q-item>
           <q-expansion-item
             group="group"
             label="First"
+            expand-separator
             header-class="q-py-md"
             v-for="order in orders"
             :key="order.id"
@@ -78,11 +85,14 @@
             <template v-slot:header >
               <q-item-section  class="q-mr-lg">{{order.id}}</q-item-section>
               <q-item-section  class="q-mr-lg">{{order.code}}</q-item-section>
-
-              <q-item-section >{{new Date(order.created_at).toLocaleString()}}</q-item-section>
+              <q-item-section  class="q-mr-lg">{{order.price}} ₽</q-item-section>
+              <q-item-section  class="q-mr-lg">{{order.delivery_price}} ₽</q-item-section>
+              <q-item-section class="q-mr-lg">{{new Date(order.created_at).toLocaleString()}}</q-item-section>
+              <q-item-section  :class="order.is_pay ? 'text-positive' :  'text-negative'">
+                {{order.is_pay ? 'Оплачен' : 'Не оплачен'}} </q-item-section>
             </template>
             <q-item dense>
-              <q-item-section  class=" text-caption">Состав заказа</q-item-section>
+
               <q-item-section>
                 <q-list class="q-mb-md" >
                   <q-item v-for="item in order.order_items" :key="item.id">
@@ -91,19 +101,14 @@
                         <img :src="item.item.image">
                       </q-avatar>
                     </q-item-section>
-                    <q-item-section>{{item.item.name}} x {{item.item.items_added}}шт<br>Вес: {{item.item.weigth}} Калорий: {{item.item.calories}}</q-item-section>
+
+                    <q-item-section>{{item.item.name}}  {{item.amount}}шт x {{item.item.price}} ₽ = {{item.amount * item.item.price}} ₽<br>Вес: {{item.item.weigth}} Калорий: {{item.item.calories}}</q-item-section>
                   </q-item>
                 </q-list>
               </q-item-section>
-              <q-item-section></q-item-section>
+
             </q-item>
-            <q-item dense>
-              <q-item-section class="text-bold ">Стоимость заказа</q-item-section>
-              <q-item-section class="text-bold ">
-              {{order.menu_type.price}} руб
-              </q-item-section>
-              <q-item-section></q-item-section>
-            </q-item>
+
           </q-expansion-item>
 
         </q-list>
@@ -128,6 +133,14 @@
                   <q-item-label>{{user.fio ? user.fio : 'Не указано'}}</q-item-label>
                 </q-item-section>
                 <q-item-section>
+                  <q-item-label overline>Email</q-item-label>
+                  <q-item-label>{{user.email}}</q-item-label>
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label overline>Телефон</q-item-label>
+                  <q-item-label>{{user.phone }}</q-item-label>
+                </q-item-section>
+                <q-item-section>
                   <q-item-label overline>Дата регистрации</q-item-label>
                   <q-item-label>{{new Date(user.date_joined).toLocaleString() }}</q-item-label>
                 </q-item-section>
@@ -149,6 +162,14 @@
                   <q-item-label overline>ФИО</q-item-label>
                   <q-item-label>{{user.fio ? user.fio : 'Не указано'}}</q-item-label>
                 </q-item-section>
+                  <q-item-section>
+                  <q-item-label overline>Email</q-item-label>
+                  <q-item-label>{{user.email}}</q-item-label>
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label overline>Телефон</q-item-label>
+                  <q-item-label>{{user.phone }}</q-item-label>
+                </q-item-section>
                 <q-item-section>
                   <q-item-label overline>Дата регистрации</q-item-label>
                   <q-item-label>{{new Date(user.date_joined).toLocaleString() }}</q-item-label>
@@ -169,6 +190,14 @@
                 <q-item-section>
                   <q-item-label overline>ФИО</q-item-label>
                   <q-item-label>{{user.fio ? user.fio : 'Не указано'}}</q-item-label>
+                </q-item-section>
+                  <q-item-section>
+                  <q-item-label overline>Email</q-item-label>
+                  <q-item-label>{{user.email}}</q-item-label>
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label overline>Телефон</q-item-label>
+                  <q-item-label>{{user.phone }}</q-item-label>
                 </q-item-section>
                 <q-item-section>
                   <q-item-label overline>Дата регистрации</q-item-label>
@@ -211,6 +240,7 @@ export default {
         { label: 'Юридическое лицо', value: 'ur' },
       ],
       userData:{
+        fio:this.$auth.user.fio,
         user_type:this.$auth.user.is_company ? 'ur':'fiz',
         address:this.$auth.user.address,
         email:this.$auth.user.email,
