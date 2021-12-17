@@ -275,7 +275,7 @@ export default {
         this.current_menu_type_index = null
         this.category_tab = 0
         this.total_added = 0
-        this.in_cart =0
+        this.in_cart = 0
         this.cart=[]
         await this.getCategories()
       }

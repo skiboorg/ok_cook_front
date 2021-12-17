@@ -193,7 +193,13 @@
 import {mapActions} from "vuex";
 import {copyToClipboard} from "quasar";
 export default {
+  preFetch ({ store, currentRoute, previousRoute, redirect, ssrContext, urlPath, publicPath }) {
 
+      if (!store.state.auth.loggedIn ) {
+        redirect({ path: '/' })
+      }
+
+    },
   data(){
     return{
       tab:'personal',

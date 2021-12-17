@@ -26,7 +26,8 @@ export default async ({ app, router, Vue, store, ssrContext }) => {
   if (token) {
    await store.dispatch('auth/getUser')
   }
-  await store.dispatch('data/fetchMenuTypes')
+  await store.dispatch('data/fetchComplects')
+  await store.dispatch('data/fetchCart')
 
   app.config.globalProperties.$auth = store.state.auth
 

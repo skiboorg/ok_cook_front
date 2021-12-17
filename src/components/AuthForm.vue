@@ -2,7 +2,7 @@
 
   <div v-if="!is_register_mode" class="sign-form">
     <div class="flex items-center justify-between q-mb-lg">
-      <p v-if="!is_password_recover" class="no-margin text-fs-18 text-bold">Пожалуйста, авторизуйтесь</p>
+      <p v-if="!is_password_recover" class="no-margin text-h6 ">Пожалуйста, авторизуйтесь</p>
       <p v-else class="no-margin text-fs-18 text-bold">Сброс пароля</p>
     </div>
     <div v-if="!is_password_recover" class="">

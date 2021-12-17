@@ -2,15 +2,22 @@ import { api } from 'boot/axios'
 
 
 const state = () => ({
-  cart:[],
-  menu_type:[],
+  cart:{
+    "id": 5,
+    "items": [],
+    "complects": []},
+  complects:[],
+  complect:{},
   session_id:''
 
 })
 
 const mutations = {
-  updateMenuType(state,data){
-    state.menu_type = data
+  updateComplects(state,data){
+    state.complects = data
+  },
+  updateComplect(state,data){
+    state.complect = data
   },
    updateCart(state,data){
     state.cart = data
@@ -26,9 +33,13 @@ const mutations = {
 const actions = {
 
 
-  async fetchMenuTypes ({commit}){
-    const response = await api.get( '/api/data/menu_type')
-    commit('updateMenuType', response.data)
+  async fetchComplects ({commit}){
+    const response = await api.get( '/api/data/complects')
+    commit('updateComplects', response.data)
+  },
+  async fetchComplect ({commit},data){
+    const response = await api.get( `/api/data/complect?id=${data}`)
+    commit('updateComplect', response.data)
   },
   async fetchCart({commit,getters}){
     console.log('getters[session_id]',getters['session_id'])
@@ -46,7 +57,8 @@ const actions = {
 }
 
 export const getters = {
-  menu_type: (state) => state.menu_type,
+  complects: (state) => state.complects,
+  complect: (state) => state.complect,
   cart: (state) => state.cart,
   session_id: (state) => state.session_id,
 

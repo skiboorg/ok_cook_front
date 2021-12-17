@@ -9,7 +9,7 @@
             <q-img  src="~assets/frost.png"/>
           </div>
           <div class="text-center">
-            <q-btn to="/menu" unelevated push size="lg" class=" q-py-sm q-px-xl" color="secondary" rounded label="Выбрать блюда"/>
+            <q-btn to="/rations" unelevated push size="lg" class=" q-py-sm q-px-xl" color="secondary" rounded label="Выбрать блюда"/>
           </div>
 
         </div>
@@ -38,9 +38,9 @@
       <p class="text-bond text-h5 text-center">Заинтересованы? Самые популярные блюда из нашего меню. </p>
       <div class="we-offer--wrapper">
         <div class="we-offer--items">
-          <router-link to="/menu"> <q-img  src="~assets/zavtrak.png"/></router-link>
-          <router-link to="/menu"><q-img  src="~assets/obed.png"/></router-link>
-          <router-link to="/menu"><q-img  src="~assets/uzin.png"/></router-link>
+          <router-link to="/rations"> <q-img  src="~assets/zavtrak.png"/></router-link>
+          <router-link to="/rations"><q-img  src="~assets/obed.png"/></router-link>
+          <router-link to="/rations"><q-img  src="~assets/uzin.png"/></router-link>
 
 
 
