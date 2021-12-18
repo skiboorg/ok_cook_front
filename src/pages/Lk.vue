@@ -59,6 +59,44 @@
           <q-input class="q-mb-sm" dense outlined v-model="userData.phone"/>
           <q-btn push rounded @click="updateUser" :loading="is_loading" no-caps label="Сохранить" color="primary" class="q-py-sm text-weight-bold"/>
         </q-form>
+        <q-separator spaced="lg"/>
+
+        <p> Смена пароля</p>
+          <q-form @submit="changePassword">
+              <q-input
+
+                       outlined
+
+                       dense
+                       v-model="password"
+                       :type="isPwd ? 'password' : 'text'"
+                       label="Новый пароль"
+                       lazy-rules
+                       :rules="[val => val !== null && val !== '' || 'Это обязательное поле', val => val.length>=8 || 'Минимум 8 символов' ]">
+
+                <template v-slot:append class="">
+                  <q-icon
+                    :name="isPwd ? 'visibility_off' : 'visibility'"
+                    class="cursor-pointer q-mr-sm"
+                    @click="isPwd = !isPwd"
+                  />
+                </template>
+              </q-input>
+              <q-input
+
+                       outlined
+
+                       dense
+                       v-model="password1"
+                       :type="isPwd ? 'password' : 'text'"
+                       label="Повторите новый пароль"
+                       lazy-rules
+                       :rules="[val => val !== null && val !== '' || 'Это обязательное поле',
+                       val => val===password || 'Пароли не совпадают' ]">
+              </q-input>
+
+              <q-btn push rounded type="submit" :loading="is_loading" no-caps label="Сменить пароль" color="primary" class="q-py-sm text-weight-bold"/>
+            </q-form>
       </q-tab-panel>
 
       <q-tab-panel name="orders">
@@ -235,6 +273,9 @@ export default {
       is_loading:false,
       orders:[],
       referals:[],
+      password:null,
+      password1:null,
+      isPwd:true,
       userType: [
         { label: 'Физическое лицо', value: 'fiz' },
         { label: 'Юридическое лицо', value: 'ur' },
@@ -262,6 +303,24 @@ export default {
   },
   methods: {
     ...mapActions('auth',['getUser']),
+     async changePassword(){
+      this.is_loading = !this.is_loading
+      const result = await this.$api.post('/api/user/change_password',{
+        password:this.password1,
+
+      })
+
+        this.$q.notify({
+          message: 'Пароль успешно изменен',
+          position: this.$q.screen.lt.sm ? 'bottom' : 'bottom-right',
+          html:true,
+          color:'positive',
+          icon: 'announcement'
+        })
+        await this.getUser()
+
+      this.is_loading = !this.is_loading
+    },
     copyCB(text){
       copyToClipboard(text)
         .then(() => {

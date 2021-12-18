@@ -178,6 +178,29 @@ export default {
     ... mapActions('auth',['loginUser']),
     async userRestorePassword(){
       this.is_loading = !this.is_loading
+      const result = await this.$api.post('/api/user/recover_password',{email:this.userData.email})
+
+      console.log(result.data)
+      if (result.data.success){
+        this.$q.notify({
+          message: 'Новый пароль выслан на указанный E-Mail',
+          position: this.$q.screen.lt.sm ? 'bottom' : 'bottom-right',
+          html:true,
+          color:'positive',
+          icon: 'announcement'
+        })
+
+      }else{
+        this.$q.notify({
+          message: 'Указанный E-Mail не найден',
+          position: this.$q.screen.lt.sm ? 'bottom' : 'bottom-right',
+          html:true,
+          color:'negative',
+          icon: 'announcement'
+        })
+      }
+
+      this.is_password_recover = false
       this.is_loading = !this.is_loading
 
     },

@@ -29,7 +29,15 @@
                   v-model="orderData.user_type"
                 />
                 <p>Местоположение</p>
-                <q-input dense outlined v-model="orderData.delivery_address"/>
+                <q-input dense class="q-mb-md" outlined v-model="orderData.delivery_address"/>
+                <p>Время доставки</p>
+                <q-option-group
+                  :options="deliveryTime"
+                  class="q-mb-md"
+                  type="radio"
+                  dense
+                  v-model="orderData.delivery_time"
+                />
                 <q-stepper-navigation>
                   <q-btn no-caps :disable="!orderData.delivery_address " @click="checkout_step=2" rounded push color="primary" label="Далее" />
 
@@ -102,7 +110,7 @@
                     </q-item>
                   </q-list>
                 </q-expansion-item>
-                <q-separator class="q-mt-sm"/>
+
                 <div class=" q-pa-md">
                   <div v-if="cart.items_count < 25" class="flex items-center justify-between">
                     <p class="no-margin  ">В корзине</p>
@@ -118,9 +126,11 @@
                   </div>
 
                 </div>
-              <q-separator />
+
               </q-list>
+            <p class="text-negative text-body2">Внимание, заказ доставляется на следующий день!<br>После 19:00 заказ доставляется через день.</p>
             <div class="text-right q-py-md">
+
                   <q-btn v-if="$auth.loggedIn"
                          :disable="checkout_step!==2 || !orderData.phone"
                          no-caps :class="{'full-width':$q.screen.lt.sm}"
@@ -158,8 +168,13 @@ export default {
         { label: 'Физическое лицо', value: 'fiz' },
         { label: 'Юридическое лицо', value: 'ur' },
       ],
+      deliveryTime: [
+        { label: 'с 9:00 до 15:00', value: 'с 9:00 до 15:00' },
+        { label: 'с 15:00 до 21:00', value: 'с 15:00 до 21:00' },
+      ],
       orderData:{
         user_type: this.$auth.user.is_company ? 'ur' : 'fiz',
+        delivery_time:'с 9:00 до 15:00',
         delivery_address:this.$auth.user.address,
         email:this.$auth.user.email,
         phone:this.$auth.user.phone,
