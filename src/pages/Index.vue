@@ -14,7 +14,7 @@
 
         </div>
         <div class="col-12 col-md-6 gradient-box full-height flex column justify-center items-start">
-          <q-img class="gradient-box--img" :ratio="4/3" src="~assets/bags.png"/>
+          <q-img class="gradient-box--img" fit="contain" :ratio="4/3" src="~assets/top_img.jpeg"/>
         </div>
       </div>
     </section>
@@ -124,13 +124,13 @@
           <q-img  src="~assets/contacts-img.png"/>
         </div>
         <div class="col-12 col-md-6 contacts-bg q-pl-md q-pl-md-xl q-py-lg">
-<!--           <p class=" text-h3 text-primary  text-lh-100">Свяжитесь с нами</p>-->
-<!--          <p class="text-bond text-h6 q-mb-none">ЭЛЕКТРОННЫЙ АДРЕС</p>-->
-<!--          <p> <a class="text-bond text-h6" href="mailto:privyet@website.ru">privyet@website.ru</a></p>-->
-<!-- <p class="text-bond text-h6 q-mb-none">ПОЧТОВЫЙ АДРЕС</p>-->
-<!--          <p class="text-bond text-h6"> ул.Первомайская, д.123, индекс 123321</p>-->
-<!--           <p class="text-bond text-h6 q-mb-none">ТЕЛЕФОННЫЙ НОМЕР</p>-->
-<!--          <p> <a class="text-bond text-h6" href="tel:+74994697890">+7(499) 469-78-90</a></p>-->
+           <p class=" text-h3 text-primary  text-lh-100">Свяжитесь с нами</p>
+          <p class="text-bond text-h6 q-mb-none">ЭЛЕКТРОННЫЙ АДРЕС</p>
+          <p> <a class="text-bond text-h6" href="mailto:ok_cook_130821@mail.ru">ok_cook_130821@mail.ru</a></p>
+ <p class="text-bond text-h6 q-mb-none">ПОЧТОВЫЙ АДРЕС</p>
+          <p class="text-bond text-h6"> г. Москва, Гагаринский переулок 28</p>
+           <p class="text-bond text-h6 q-mb-none">ТЕЛЕФОННЫЙ НОМЕР</p>
+          <p> <a class="text-bond text-h6" href="tel:+79175691973">+7 (917) 569-19-73</a></p>
         </div>
       </div>
     </section>
