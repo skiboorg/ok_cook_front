@@ -8,9 +8,11 @@
         </router-link>
         <nav class="nav gt-sm">
           <ul class="nav-wrapper">
+             <li v-if="$auth.user.is_staff" class="nav-item"><router-link class="text-bold text-positive" to="/orders">Заказы</router-link></li>
             <li class="nav-item"><a class="nav-link" href="#feedback"  >О нас </a></li>
             <li class="nav-item"><a class="nav-link" href="#our_products"  >Продукция </a></li>
             <li class="nav-item"><a class="nav-link" href="#faq"  >Помощь </a></li>
+
 
             <li></li>
             <li></li>

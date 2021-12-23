@@ -11,7 +11,8 @@ const routes = [
       { path: 'auth', component: () => import('pages/Auth.vue') },
       { path: 'lk', component: () => import('pages/Lk.vue') },
       { path: 'checkout', component: () => import('pages/Checkout.vue') },
-      { path: 'order/:order_id', component: () => import('pages/PaySuccess.vue') }
+      { path: 'order/:order_id', component: () => import('pages/PaySuccess.vue') },
+      { path: 'orders', component: () => import('pages/Orders.vue') }
     ]
   },
 
