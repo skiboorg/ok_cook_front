@@ -1,10 +1,15 @@
 <template>
   <q-page>
-
+  <div class="q-py-lg">
+    <p>Отметить все заказы обработанным и выгрузить в pdf</p>
+    <q-btn v-if="!sklad_filename" @click="orderDone(0,'all')" color="positive" push no-caps rounded label="Выполнить"/>
+    <a v-if="sklad_filename" class="link text-bold text-positive" :href="sklad_filename" target="_blank">Скачать PDF для склада</a><br><br>
+    <a v-if="sklad_filename" class="link text-bold text-positive" :href="transport_filename" target="_blank">Скачать PDF для логистики</a>
+  </div>
   <q-tabs
       v-model="tab"
       dense
-      class="text-grey q-pt-lg"
+      class="text-grey "
       active-color="primary"
       indicator-color="primary"
       align="justify"
@@ -78,7 +83,7 @@
                    <q-separator class="q-mb-lg"/>
                   <div class="q-px-md">
                       <p class="">Итого: {{order.price}} ₽</p>
-                    <q-btn @click="orderDone(order.id)" color="positive" push no-caps rounded label="Заказ обработан"/>
+<!--                    <q-btn @click="orderDone(order.id,'single')" color="positive" push no-caps rounded label="Заказ обработан"/>-->
                   </div>
 
                 </q-list>
@@ -187,6 +192,8 @@ export default {
     return{
       tab:'in_work',
       is_loading:false,
+      sklad_filename:null,
+      transport_filename:null,
       in_work_orders:[],
       done_orders:[],
     }
@@ -204,9 +211,13 @@ export default {
       this.done_orders = done_orders.data
       this.is_loading = !this.is_loading
     },
-    async orderDone(id){
+    async orderDone(id,action){
        this.is_loading = !this.is_loading
-      await this.$api.post('/api/order/order_done',{id})
+      const response = await this.$api.post('/api/order/order_done',{id,action})
+      if(response.data.sklad_filename){
+        this.sklad_filename = response.data.sklad_filename
+        this.transport_filename = response.data.transport_filename
+      }
       this.is_loading = !this.is_loading
       await this.getOrders()
     }
