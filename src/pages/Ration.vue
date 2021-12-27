@@ -29,12 +29,14 @@
             <q-card  class="full-width  bg-grey-2 q-mb-sm " :class="[$q.screen.lt.sm ? 'shadow-2' : ' shadow-3']">
               <q-card-section class="flex column items-center justify-center">
                 <q-img :ratio="1" fit="contain" :src="item.image"/>
-                <p class="q-mb-sm text-bold">{{item.name}}</p>
-                <p class="q-mb-sm text-caption">Вес {{item.weigth}}</p>
-                <p class="q-mb-sm text-caption">Калорий {{item.calories}}</p>
-                <p class="q-mb-md text-caption text-bold">Цена {{item.price}} ₽</p>
 
-                <div v-if="complect.show_items_amount">
+                <p class="q-mb-xs text-bold">{{item.name}}</p>
+                <p class="q-mb-xs text-caption">Вес {{item.weigth}}</p>
+                <p class="q-mb-xs text-caption">Калорий {{item.calories}}</p>
+                <p class="q-mb-xs  text-bold">Цена {{item.price}} ₽</p>
+                <p class="q-mb-md text-caption text-bold">В наличии {{item.ostatok}} шт.</p>
+                <div v-if="item.ostatok>0" class="">
+                  <div v-if="complect.show_items_amount">
                   <q-btn-group  push outline spread  rounded class="q-mb-lg ">
                     <q-btn :dense="$q.screen.lt.sm" :disable="!can_add_more || item.is_selected" @click="del_item_count(cat_index,item_index)" push color="primary" icon="remove" />
                     <q-btn :dense="$q.screen.lt.sm" :disable="!can_add_more || item.is_selected" color="white" text-color="secondary" class="text-bold "  :label="item.items_added" v-ripple="false" />
@@ -64,6 +66,9 @@
                   <q-btn v-if="item.is_selected" :loading="is_loading" class="full-width" @click="deselectItem(cat_index,item_index,item.id)" label="Отменить" push no-caps rounded color="negative"/>
 
                 </div>
+                </div>
+                <div v-else><p class="q-mb-none text-negative">Нет в наличии</p></div>
+
 
 
               </q-card-section>
@@ -127,6 +132,7 @@ export default {
   },
   data(){
     return{
+      can_add_to_cart:true,
       total_items_added:0,
       show_bottom_buttons:false,
       is_added_to_cart:false,
@@ -152,8 +158,8 @@ export default {
   methods:{
     ...mapActions('data',['fetchCart']),
     add_item_count(cat_index, item_index){
-
-      if(!this.complect.is_unlimited){
+      if (this.categories[cat_index].items[item_index].ostatok>this.categories[cat_index].items[item_index].items_added){
+       if(!this.complect.is_unlimited){
         if(this.complect.items_count > this.amout_total_added){
           this.categories[cat_index].items[item_index].items_added += 1
           this.amout_total_added += 1
@@ -162,6 +168,10 @@ export default {
         this.categories[cat_index].items[item_index].items_added += 1
         this.amout_total_added += 1
       }
+      }else {
+        console.log('full')
+      }
+
 
 
     },
@@ -172,6 +182,41 @@ export default {
       }
     },
     async addToCart(){
+
+     let temp = {}
+    for(let complect of this.cart.complects){
+        for(let item of complect.items){
+          if (temp[item.item.id]){
+            temp[item.item.id] += item.amount * complect.amount
+            if(temp[item.item.id] >= item.item.ostatok){
+              this.$q.notify({
+                message: `Выбранный комплект нельзя добавить в корзину<br>т.к в корзине максимально доступное количество<br>${item.item.name} `,
+                position: this.$q.screen.lt.sm ? 'top' : 'bottom-right',
+                color:'negative',
+                html:true,
+                icon: 'add_shopping_cart'
+              })
+              this.can_add_to_cart = false
+            }
+          }else {
+            temp[item.item.id] = item.amount * complect.amount
+            if(temp[item.item.id] >= item.item.ostatok){
+              this.$q.notify({
+                message: `Выбранный комплект нельзя добавить в корзину<br>т.к в корзине максимально доступное количество<br>${item.item.name} `,
+                position: this.$q.screen.lt.sm ? 'top' : 'bottom-right',
+                color:'negative',
+                html:true,
+                icon: 'add_shopping_cart'
+              })
+              this.can_add_to_cart = false
+            }
+          }
+
+        }
+      }
+    if (!this.can_add_to_cart){
+      return
+    }
       this.is_loading = !this.is_loading
       const response = await this.$api.post('/api/cart/add',{
         complect_id:this.complect.id,
@@ -317,7 +362,7 @@ export default {
 
   },
   computed:{
-    ...mapGetters('data',['complect','session_id']),
+    ...mapGetters('data',['complect','session_id','cart']),
     items_to_show(){
       let items
       this.$q.screen.lt.sm ? items = 2 : items = 5

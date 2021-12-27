@@ -1,10 +1,11 @@
 <template>
   <q-page>
-  <div class="q-py-lg">
+  <div v-if="in_work_orders.length > 0" class="q-py-lg">
     <p>Отметить все заказы обработанным и выгрузить в pdf</p>
     <q-btn v-if="!sklad_filename" @click="orderDone(0,'all')" color="positive" push no-caps rounded label="Выполнить"/>
     <a v-if="sklad_filename" class="link text-bold text-positive" :href="sklad_filename" target="_blank">Скачать PDF для склада</a><br><br>
-    <a v-if="sklad_filename" class="link text-bold text-positive" :href="transport_filename" target="_blank">Скачать PDF для логистики</a>
+    <a v-if="sklad_filename" class="link text-bold text-positive" :href="transport_filename" target="_blank">Скачать PDF для логистики</a><br><br>
+    <a v-if="sklad_filename" class="link text-bold text-positive" :href="calc_filename" target="_blank">Скачать сводный PDF</a>
   </div>
   <q-tabs
       v-model="tab"
@@ -62,6 +63,8 @@
                   <p class="q-mb-sm text-body1"><span class="text-bold">Телефон: </span>{{order.phone}}</p>
                   <p v-if="order.company_name" class="q-mb-sm text-body1"><span class="text-bold">Название компании: </span>{{order.company_name}}</p>
                   <p v-if="order.company_contact" class="q-mb-sm text-body1"><span class="text-bold">Контактное лицо: </span>{{order.company_contact}}</p>
+                  <p class="q-mb-sm text-body1"><span class="text-bold">Город: </span>{{order.city.label}}</p>
+                  <p class="q-mb-sm text-body1"><span class="text-bold">Район: </span>{{order.sector.label}}</p>
                   <p class="q-mb-sm text-body1"><span class="text-bold">Адрес доставки: </span>{{order.address}}</p>
                   <p class="q-mb-sm text-body1"><span class="text-bold">Время доставки: </span>{{order.delivery_time}}</p>
                   <p v-if="order.comment" class="q-mb-sm text-body1"><span class="text-bold">Комментарий: </span>{{order.comment}}</p>
@@ -194,6 +197,7 @@ export default {
       is_loading:false,
       sklad_filename:null,
       transport_filename:null,
+      calc_filename:null,
       in_work_orders:[],
       done_orders:[],
     }
@@ -217,6 +221,7 @@ export default {
       if(response.data.sklad_filename){
         this.sklad_filename = response.data.sklad_filename
         this.transport_filename = response.data.transport_filename
+        this.calc_filename = response.data.calc_filename
       }
       this.is_loading = !this.is_loading
       await this.getOrders()

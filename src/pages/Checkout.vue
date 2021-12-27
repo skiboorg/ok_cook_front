@@ -1,5 +1,6 @@
 <template>
   <q-page>
+
  <div v-if="cart.complects.length>0" class="row q-mt-lg">
           <div class="col-12 col-md-6 q-mb-lg q-mb-md-none">
             <AuthForm v-if="!$auth.loggedIn" :redirect="false"/>
@@ -16,11 +17,11 @@
             >
               <q-step
                 :name="1"
-                title="Регион доставки"
+                title="Информация о доставке"
                 icon="person"
                 :done="checkout_step > 1"
               >
-                <p>Тип плательщика</p>
+                <p class="text-bold">Тип плательщика</p>
                 <q-option-group
                   :options="userType"
                   class="q-mb-md"
@@ -28,9 +29,13 @@
                   dense
                   v-model="orderData.user_type"
                 />
-                <p>Местоположение</p>
-                <q-input dense class="q-mb-md" outlined v-model="orderData.delivery_address"/>
-                <p>Время доставки</p>
+                <p class="text-bold">Доставка</p>
+                <q-select dense class="q-mb-sm" outlined v-model="orderData.city" :options="cities" label="Город"/>
+                <q-select dense class="q-mb-sm" outlined v-model="orderData.sector"
+                          :options="orderData.city ? orderData.city.sectors : []"
+                          :label="orderData.city ? 'Район' : 'Выберите город'"/>
+                <q-input dense class="q-mb-md" outlined v-model="orderData.delivery_address" label="Адрес"/>
+                <p class="text-bold">Время доставки</p>
                 <q-option-group
                   :options="deliveryTime"
                   class="q-mb-md"
@@ -39,7 +44,7 @@
                   v-model="orderData.delivery_time"
                 />
                 <q-stepper-navigation>
-                  <q-btn no-caps :disable="!orderData.delivery_address " @click="checkout_step=2" rounded push color="primary" label="Далее" />
+                  <q-btn no-caps :disable="!orderData.delivery_address ||  !orderData.sector" @click="checkout_step=2" rounded push color="primary" label="Далее" />
 
                 </q-stepper-navigation>
               </q-step>
@@ -162,7 +167,7 @@ export default {
 
       is_loading:false,
       checkout_step:1,
-
+      cities:[],
 
        userType: [
         { label: 'Физическое лицо', value: 'fiz' },
@@ -178,7 +183,8 @@ export default {
         delivery_address:this.$auth.user.address,
         email:this.$auth.user.email,
         phone:this.$auth.user.phone,
-        city:this.$auth.user.city,
+        city:null,
+        sector:null,
         comment:null,
         company_name:this.$auth.user.company_name,
         company_address:this.$auth.user.company_address,
@@ -189,7 +195,10 @@ export default {
       }
     }
   },
-
+  async beforeMount(){
+    const response = await this.$api.get('/api/order/cities')
+    this.cities = response.data
+  },
 
   methods:{
      ...mapActions('data',['fetchCart']),
