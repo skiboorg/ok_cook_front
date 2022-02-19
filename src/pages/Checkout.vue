@@ -1,7 +1,7 @@
 <template>
   <q-page>
-
- <div v-if="cart.complects.length>0" class="row q-mt-lg">
+<div v-if="!is_order_done" class="">
+   <div v-if="cart.complects.length>0" class="row q-mt-lg">
           <div class="col-12 col-md-6 q-mb-lg q-mb-md-none">
             <AuthForm v-if="!$auth.loggedIn" :redirect="false"/>
             <div v-else class="">
@@ -152,6 +152,13 @@
       <p class="text-h4 text-bold text-primary q-mb-lg">Корзина пуста</p>
        <q-btn to="/rations" no-caps unelevated push size="lg" class=" q-py-sm q-px-xl" color="secondary" rounded label="Выбрать блюда"/>
     </div>
+</div>
+    <div style="height: 70vh" v-else class="flex column items-center justify-center ">
+      <p class="text-h4 text-primary">Заказ № {{order_code}}</p>
+      <p class="text-h5 text-primary">Успешно сформирован</p>
+
+    </div>
+
   </q-page>
 </template>
 <script>
@@ -168,6 +175,8 @@ export default {
       is_loading:false,
       checkout_step:1,
       cities:[],
+      is_order_done:false,
+      order_code:'null',
 
        userType: [
         { label: 'Физическое лицо', value: 'fiz' },
@@ -206,10 +215,28 @@ export default {
       this.is_loading = !this.is_loading
       const response = await this.$api.post('/api/order/create',{order_data:this.orderData})
       console.log(response.data)
+      if (response.data.success){
+        this.$q.notify({
+          message: 'Заказ создан<br>Сейчас вы будете перенаправлены<br>на оплату',
+          position: this.$q.screen.lt.sm ? 'bottom' : 'bottom-right',
+          color:'positive',
+          icon: 'announcement'
+        })
+        //window.location.href = response.data.payment_url
+        window.open(response.data.payment_url, '_blank');
+        this.order_code = response.data.code
+        this.is_order_done = true
+      }else {
+        this.$q.notify({
+          message: 'Заказ создан, но произошла<br> ошбка формирования платежа',
+          position: this.$q.screen.lt.sm ? 'bottom' : 'bottom-right',
+          color:'negative',
+          html:true,
+          icon: 'announcement'
+        })
+      }
       await this.fetchCart()
-      window.location.href = response.data.url
-      this.order_code = response.data.code
-      this.is_order_done = true
+
       this.is_loading = !this.is_loading
     },
 
